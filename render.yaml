@@ -5,6 +5,7 @@ services:
     rootDir: backend
     plan: free
     buildCommand: npm install && npm run build
+    preDeployCommand: npm run db:setup
     startCommand: npm run start
     healthCheckPath: /health
     envVars:

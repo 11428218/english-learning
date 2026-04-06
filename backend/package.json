@@ -9,6 +9,7 @@
     "start": "node dist/server.js",
     "db:init": "ts-node src/db/init.ts",
     "db:seed": "ts-node src/db/seed.ts",
+    "db:setup": "npm run db:init && npm run db:seed",
     "db:import:english": "ts-node src/db/importEnglishWords.ts",
     "db:import:dictionary": "ts-node src/db/importOfflineDictionary.ts",
     "db:build:wordnet": "ts-node src/db/buildWordNetDataset.ts",
