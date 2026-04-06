@@ -246,6 +246,23 @@ If your repo is named `<your-github-username>.github.io`, the URL becomes:
 
 `https://<your-github-username>.github.io/`
 
+### Use one workflow file for full deployment
+
+This repo now uses a single workflow file [ .github/workflows/deploy-pages.yml ](.github/workflows/deploy-pages.yml) to orchestrate:
+
+1. GitHub Pages static site deployment
+2. Render backend deployment trigger
+3. Vercel frontend production deployment
+
+Add these GitHub repository secrets:
+
+1. `RENDER_DEPLOY_HOOK_URL`
+2. `VERCEL_TOKEN`
+3. `VERCEL_ORG_ID`
+4. `VERCEL_PROJECT_ID`
+
+After secrets are set, every push to `main` runs all deploy steps automatically.
+
 ## ☁ Deploy Full Production App (Frontend + Backend + PostgreSQL)
 
 GitHub Pages only publishes static files in `docs/`. To deploy the **full app** (Review, Words, Dashboard, API), use:
