@@ -1,0 +1,59 @@
+# Dependencies
+node_modules/
+.pnp
+.pnp.js
+
+# Testing
+*.lcov
+coverage/
+
+# Build outputs
+/dist/
+/build/
+/.next/
+/out/
+**/dist/
+**/.next/
+**/build/
+**/out/
+
+# Environment variables
+.env
+.env.local
+.env.*.local
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Logs
+logs/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# OS
+Thumbs.db
+.DS_Store
+
+# Database
+*.sql
+*.sqlite
+*.db
+
+# Large generated datasets
+backend/data/local-ai-corpus.json
+backend/data/wordnet-structured.json
+backend/data/wordnet-structured.jsonl
+
+# Cache
+.cache/
+.eslintcache
+
+# Misc
+*.bak
+*.tmp

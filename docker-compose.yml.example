@@ -1,0 +1,44 @@
+#!/bin/bash
+
+#DuoLingual Docker Compose Setup
+#Run locally with Docker and PostgreSQL
+
+echo "🐳 Starting DuoLingual with Docker Compose..."
+
+# Create .env if not exists
+if [ ! -f .env ]; then
+    echo "Creating .env file..."
+    cat > .env << EOF
+# PostgreSQL
+POSTGRES_DB=duolingual
+POSTGRES_USER=postgres
+POSTGRES_PASSWORD=postgres
+DB_HOST=postgres
+DB_PORT=5432
+
+# Backend
+PORT=5000
+NODE_ENV=development
+JWT_SECRET=dev-secret-key-change-in-production
+CRAWLER_USER_AGENT=duolingual-local-ai-bot/1.0
+FRONTEND_URL=http://localhost:3000
+
+# Frontend
+NEXT_PUBLIC_API_URL=http://localhost:5000
+EOF
+    echo "✓ Created .env file for local AI crawler mode"
+fi
+
+# Start Docker Compose
+docker-compose up -d
+
+echo ""
+echo "✓ Containers started!"
+echo ""
+echo "Services:"
+echo "- Frontend: http://localhost:3000"
+echo "- Backend: http://localhost:5000"
+echo "- PostgreSQL: localhost:5432"
+echo ""
+echo "To view logs: docker-compose logs -f"
+echo "To stop: docker-compose down"
