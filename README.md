@@ -284,7 +284,8 @@ Steps:
   - `FRONTEND_URL=https://<your-vercel-domain>`
   - `FRONTEND_URLS=https://<your-vercel-domain>,https://<your-preview-domain>` (optional)
 5. Render free tier does not support pre-deploy commands.
-6. After first deploy, run DB initialization once (Render Shell):
+6. This repo runs DB setup in Render `startCommand` automatically (`npm run db:setup && npm run start`), so paid Shell is not required.
+7. If you still need to run manually, use Render Shell (paid) and run:
 
 ```bash
 cd backend
