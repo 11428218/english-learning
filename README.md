@@ -257,9 +257,7 @@ This repo now uses a single workflow file [ .github/workflows/deploy-pages.yml ]
 Add these GitHub repository secrets:
 
 1. `RENDER_DEPLOY_HOOK_URL`
-2. `VERCEL_TOKEN`
-3. `VERCEL_ORG_ID`
-4. `VERCEL_PROJECT_ID`
+2. `VERCEL_DEPLOY_HOOK_URL`
 
 After secrets are set, every push to `main` runs all deploy steps automatically.
 
