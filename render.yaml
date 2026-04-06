@@ -1,11 +1,16 @@
+databases:
+  - name: prolingual-db
+    plan: free
+    databaseName: prolingual
+    user: prolingual_user
+
 services:
   - type: web
     name: prolingual-backend
-    runtime: node
+    env: node
     rootDir: backend
     plan: free
     buildCommand: npm install && npm run build
-    preDeployCommand: npm run db:setup
     startCommand: npm run start
     healthCheckPath: /health
     envVars:
@@ -27,8 +32,3 @@ services:
         sync: false
       - key: FRONTEND_URLS
         sync: false
-
-  - type: pserv
-    name: prolingual-db
-    plan: free
-    ipAllowList: []
