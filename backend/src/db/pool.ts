@@ -7,12 +7,26 @@ dotenv.config();
  * Database connection pool
  * Manages PostgreSQL connections efficiently
  */
+const databaseUrl = process.env.DATABASE_URL;
+const shouldUseSsl = String(process.env.DB_SSL || (process.env.NODE_ENV === 'production' ? 'true' : 'false')).toLowerCase() === 'true';
+
 const pool = new Pool({
-  host: process.env.DB_HOST,
-  port: parseInt(process.env.DB_PORT || '5432'),
-  database: process.env.DB_NAME,
-  user: process.env.DB_USER,
-  password: process.env.DB_PASSWORD,
+  ...(databaseUrl
+    ? {
+        connectionString: databaseUrl,
+      }
+    : {
+        host: process.env.DB_HOST,
+        port: parseInt(process.env.DB_PORT || '5432'),
+        database: process.env.DB_NAME,
+        user: process.env.DB_USER,
+        password: process.env.DB_PASSWORD,
+      }),
+  ssl: shouldUseSsl
+    ? {
+        rejectUnauthorized: false,
+      }
+    : undefined,
   max: parseInt(process.env.DB_POOL_MAX || '20', 10),
   idleTimeoutMillis: parseInt(process.env.DB_IDLE_TIMEOUT_MS || '30000', 10),
   connectionTimeoutMillis: parseInt(process.env.DB_CONNECT_TIMEOUT_MS || '5000', 10),

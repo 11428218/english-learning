@@ -7,12 +7,20 @@ import axios, { AxiosInstance } from 'axios';
 
 const CONFIGURED_BASE_URL = process.env.NEXT_PUBLIC_API_URL;
 const FALLBACK_BASE_URLS = ['http://localhost:5000', 'http://localhost:5001', 'http://localhost:5002'];
+const SHOULD_USE_LOCAL_FALLBACKS = process.env.NODE_ENV !== 'production';
 
 const CANDIDATE_BASE_URLS = CONFIGURED_BASE_URL
-  ? [CONFIGURED_BASE_URL, ...FALLBACK_BASE_URLS.filter((url) => url !== CONFIGURED_BASE_URL)]
-  : FALLBACK_BASE_URLS;
+  ? [
+      CONFIGURED_BASE_URL,
+      ...(SHOULD_USE_LOCAL_FALLBACKS
+        ? FALLBACK_BASE_URLS.filter((url) => url !== CONFIGURED_BASE_URL)
+        : []),
+    ]
+  : SHOULD_USE_LOCAL_FALLBACKS
+    ? FALLBACK_BASE_URLS
+    : [];
 
-let activeBaseUrl = CANDIDATE_BASE_URLS[0];
+let activeBaseUrl = CANDIDATE_BASE_URLS[0] || '';
 
 class APIClient {
   private client: AxiosInstance;

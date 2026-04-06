@@ -28,6 +28,20 @@ const REQUESTED_PORT = Number(process.env.PORT || 5000);
 const STRICT_PORT = String(process.env.STRICT_PORT || 'true').toLowerCase() !== 'false';
 const REQUEST_TIMEOUT_MS = Number(process.env.REQUEST_TIMEOUT_MS || 20000);
 
+const parseAllowedOrigins = (): string[] => {
+  const single = process.env.FRONTEND_URL || '';
+  const multiple = process.env.FRONTEND_URLS || '';
+
+  const list = `${single},${multiple}`
+    .split(',')
+    .map((x) => x.trim())
+    .filter(Boolean);
+
+  return list.length > 0 ? list : ['http://localhost:3000'];
+};
+
+const allowedOrigins = parseAllowedOrigins();
+
 const findAvailablePort = (port: number): Promise<number> =>
   new Promise((resolve) => {
     const tester = net.createServer();
@@ -56,7 +70,17 @@ const isPortAvailable = (port: number): Promise<boolean> =>
  */
 app.use(
   cors({
-    origin: process.env.FRONTEND_URL || 'http://localhost:3000',
+    origin: (origin, callback) => {
+      if (!origin) {
+        return callback(null, true);
+      }
+
+      if (allowedOrigins.includes(origin)) {
+        return callback(null, true);
+      }
+
+      return callback(new Error(`CORS blocked for origin: ${origin}`));
+    },
     credentials: true,
   })
 );
@@ -179,7 +203,7 @@ const startServer = async () => {
 
     server.listen(port, () => {
       console.log(`✓ Server running on port ${port}`);
-      console.log(`✓ Frontend URL: ${process.env.FRONTEND_URL}`);
+      console.log(`✓ Allowed frontend origins: ${allowedOrigins.join(', ')}`);
       console.log(`✓ API is available at http://localhost:${port}`);
     });
 

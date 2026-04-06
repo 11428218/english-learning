@@ -245,6 +245,71 @@ After deployment, your site URL will be:
 If your repo is named `<your-github-username>.github.io`, the URL becomes:
 
 `https://<your-github-username>.github.io/`
+
+## ☁ Deploy Full Production App (Frontend + Backend + PostgreSQL)
+
+GitHub Pages only publishes static files in `docs/`. To deploy the **full app** (Review, Words, Dashboard, API), use:
+
+- Frontend: Vercel
+- Backend: Render Web Service
+- Database: Render PostgreSQL (or Supabase/Neon)
+
+### 1. Deploy Backend on Render
+
+This repo includes [render.yaml](render.yaml) for one-click Render Blueprint deployment.
+
+Steps:
+
+1. In Render, choose `New` -> `Blueprint`.
+2. Connect your GitHub repo.
+3. Render reads [render.yaml](render.yaml) and creates:
+  - `prolingual-backend` (Node web service)
+  - `prolingual-db` (PostgreSQL)
+4. Set backend env vars:
+  - `FRONTEND_URL=https://<your-vercel-domain>`
+  - `FRONTEND_URLS=https://<your-vercel-domain>,https://<your-preview-domain>` (optional)
+5. After first deploy, run DB initialization once (Render Shell):
+
+```bash
+cd backend
+npm run db:init
+npm run db:seed
+```
+
+### 2. Deploy Frontend on Vercel
+
+1. Import your GitHub repo into Vercel.
+2. Framework: Next.js.
+3. Set **Root Directory** to `frontend`.
+4. Add environment variables:
+  - `NEXT_PUBLIC_API_URL=https://<your-render-backend-domain>`
+  - `NEXT_PUBLIC_API_TIMEOUT_MS=12000` (optional)
+5. Deploy.
+
+### 3. Verify Production
+
+Backend checks:
+
+- `https://<your-render-backend-domain>/health`
+- `https://<your-render-backend-domain>/health/details`
+
+Frontend checks:
+
+- Open `https://<your-vercel-domain>/review`
+- Confirm words/reviews load from production API
+
+### Required Env Summary
+
+Backend (Render):
+
+- `DATABASE_URL` (from Render DB)
+- `DB_SSL=true`
+- `JWT_SECRET` (strong random)
+- `FRONTEND_URL`
+
+Frontend (Vercel):
+
+- `NEXT_PUBLIC_API_URL`
 - `DICTIONARY_BATCH_SIZE`: rows per DB batch (default: 1000)
 - `DICTIONARY_INSERT_MISSING`: `true` to insert words not yet in DB; default is `false` (update existing only)
 
