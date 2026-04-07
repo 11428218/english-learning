@@ -96,6 +96,19 @@ app.use((req, res, next) => {
 /**
  * Initialize database on startup
  */
+app.get('/', (req, res) => {
+  res.json({
+    service: 'ProLingual Backend API',
+    status: 'ok',
+    endpoints: {
+      health: '/health',
+      healthDetails: '/health/details',
+      words: '/words',
+      reviewToday: '/review/today',
+    },
+  });
+});
+
 app.get('/health', (req, res) => {
   res.json({ status: 'ok' });
 });
